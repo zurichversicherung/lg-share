@@ -11,7 +11,9 @@
         googlePlus: true,
         googlePlusDropdownText: 'GooglePlus',
         pinterest: true,
-        pinterestDropdownText: 'Pinterest'
+        pinterestDropdownText: 'Pinterest',
+        mail: true,
+        mailDropdownText: 'Mail'
     };
 
     var Share = function(element) {
@@ -34,6 +36,7 @@
         shareHtml += _this.core.s.twitter ? '<li><a id="lg-share-twitter" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.twitterDropdownText + '</span></a></li>' : '';
         shareHtml += _this.core.s.googlePlus ? '<li><a id="lg-share-googleplus" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.googlePlusDropdownText + '</span></a></li>' : '';
         shareHtml += _this.core.s.pinterest ? '<li><a id="lg-share-pinterest" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.pinterestDropdownText + '</span></a></li>' : '';
+        shareHtml += _this.core.s.mail ? '<li><a id="lg-share-mail"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.mailDropdownText + '</span></a></li>' : '';
         shareHtml += '</ul></span>';
 
         this.core.$outer.find('.lg-toolbar').append(shareHtml);
@@ -48,7 +51,7 @@
 
         _this.core.$el.on('onAfterSlide.lg.tm', function(event, prevIndex, index) {
 
-            setTimeout(function() { 
+            setTimeout(function() {
                 $('#lg-share-facebook').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + (encodeURIComponent(_this.core.$items.eq(index).attr('data-facebook-share-url') || window.location.href)));
 
                 $('#lg-share-twitter').attr('href', 'https://twitter.com/intent/tweet?text=' + _this.core.$items.eq(index).attr('data-tweet-text') + '&url=' + (encodeURIComponent(_this.core.$items.eq(index).attr('data-twitter-share-url') || window.location.href)));
@@ -56,6 +59,8 @@
                 $('#lg-share-googleplus').attr('href', 'https://plus.google.com/share?url=' + (encodeURIComponent(_this.core.$items.eq(index).attr('data-googleplus-share-url') || window.location.href)));
 
                 $('#lg-share-pinterest').attr('href', 'http://www.pinterest.com/pin/create/button/?url=' + (encodeURIComponent(_this.core.$items.eq(index).attr('data-pinterest-share-url') || window.location.href)) + '&media=' + encodeURIComponent(_this.core.$items.eq(index).attr('href') || _this.core.$items.eq(index).attr('data-src')) + '&description=' + _this.core.$items.eq(index).attr('data-pinterest-text'));
+
+                $('#lg-share-mail').attr('href', 'mailto:?subject=' + $('.lg-sub-html').html() + '&body=' + _this.core.$items.eq(index).attr('href') || _this.core.$items.eq(index).attr('data-src'));
 
             }, 100);
         });
