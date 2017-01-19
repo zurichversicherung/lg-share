@@ -13,7 +13,9 @@
         pinterest: true,
         pinterestDropdownText: 'Pinterest',
         mail: true,
-        mailDropdownText: 'Mail'
+        mailDropdownText: 'Mail',
+        whatsapp: true,
+        whatsappDropdownText: 'Whatsapp'
     };
 
     var Share = function(element) {
@@ -28,6 +30,26 @@
         return this;
     };
 
+    var isMobile = function () {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        // Windows Phone must come first because its UA also contains "Android"
+        if (/windows phone/i.test(userAgent)) {
+            return true;
+        }
+
+        if (/android/i.test(userAgent)) {
+            return true;
+        }
+
+        // iOS detection from: http://stackoverflow.com/a/9039885/177710
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            return true;
+        }
+
+        return false;
+    }
+
     Share.prototype.init = function() {
         var _this = this;
         var shareHtml = '<span id="lg-share" class="lg-icon">' +
@@ -37,6 +59,7 @@
         shareHtml += _this.core.s.googlePlus ? '<li><a id="lg-share-googleplus" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.googlePlusDropdownText + '</span></a></li>' : '';
         shareHtml += _this.core.s.pinterest ? '<li><a id="lg-share-pinterest" target="_blank"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.pinterestDropdownText + '</span></a></li>' : '';
         shareHtml += _this.core.s.mail ? '<li><a id="lg-share-mail"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.mailDropdownText + '</span></a></li>' : '';
+        isMobile() ? shareHtml += _this.core.s.whatsapp ? '<li><a id="lg-share-whatsapp"><span class="lg-icon"></span><span class="lg-dropdown-text">' + this.core.s.whatsappDropdownText + '</span></a></li>' : '' : '';
         shareHtml += '</ul></span>';
 
         this.core.$outer.find('.lg-toolbar').append(shareHtml);
@@ -61,6 +84,8 @@
                 $('#lg-share-pinterest').attr('href', 'http://www.pinterest.com/pin/create/button/?url=' + (encodeURIComponent(_this.core.$items.eq(index).attr('data-pinterest-share-url') || window.location.href)) + '&media=' + encodeURIComponent(_this.core.$items.eq(index).attr('href') || _this.core.$items.eq(index).attr('data-src')) + '&description=' + _this.core.$items.eq(index).attr('data-pinterest-text'));
 
                 $('#lg-share-mail').attr('href', 'mailto:?subject=' + $('.lg-sub-html').html() + '&body=' + _this.core.$items.eq(index).attr('href') || _this.core.$items.eq(index).attr('data-src'));
+
+                isMobile() ? $('#lg-share-whatsapp').attr('href', 'whatsapp://send?text=' + _this.core.$items.eq(index).attr('href') || _this.core.$items.eq(index).attr('data-src')) : '';
 
             }, 100);
         });
